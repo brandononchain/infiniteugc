@@ -1,8 +1,102 @@
 "use client";
 
-import { motion, useMotionValue } from "framer-motion";
+import { motion, useMotionValue, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { ArrowRight, Lightning, Play } from "@phosphor-icons/react";
 import { useRef } from "react";
+
+/* ─── Floating Video Card ─── */
+interface FloatingCardProps {
+  src: string;
+  type: "video" | "avatar";
+  className?: string;
+  rotateX?: number;
+  rotateY?: number;
+  rotateZ?: number;
+  delay?: number;
+  duration?: number;
+}
+
+function FloatingVideoCard({
+  src,
+  type,
+  className = "",
+  rotateX = 0,
+  rotateY = 0,
+  rotateZ = 0,
+  delay = 0,
+  duration = 7,
+}: FloatingCardProps) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.8 + delay, duration: 0.6, ease: "easeOut" }}
+      className={`absolute pointer-events-none z-10 ${className}`}
+      style={{
+        perspective: "800px",
+      }}
+    >
+      <motion.div
+        animate={{
+          y: [0, -14, 0],
+          rotateZ: [rotateZ, rotateZ + 1, rotateZ],
+        }}
+        transition={{
+          duration,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: delay * 0.5,
+        }}
+        style={{
+          transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`,
+          transformStyle: "preserve-3d",
+        }}
+        className="rounded-2xl overflow-hidden border border-white/30 shadow-[0_8px_40px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.06)] backdrop-blur-sm"
+      >
+        {/* Glass reflection overlay */}
+        <div className="absolute inset-0 z-20 bg-gradient-to-br from-white/20 via-transparent to-transparent pointer-events-none" />
+
+        {type === "video" ? (
+          <div className="relative">
+            <video
+              src={src}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            />
+            {/* Play icon overlay */}
+            <div className="absolute inset-0 flex items-center justify-center z-10">
+              <div className="w-8 h-8 bg-white/70 rounded-full flex items-center justify-center backdrop-blur-sm shadow-lg">
+                <Play size={12} weight="fill" className="text-zinc-700 ml-0.5" />
+              </div>
+            </div>
+            {/* Progress bar */}
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/20 z-10">
+              <motion.div
+                className="h-full bg-accent-500/80"
+                animate={{ width: ["0%", "100%"] }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "linear",
+                  delay: delay,
+                }}
+              />
+            </div>
+          </div>
+        ) : (
+          <img
+            src={src}
+            alt="AI Avatar"
+            className="w-full h-full object-cover"
+          />
+        )}
+      </motion.div>
+    </motion.div>
+  );
+}
 
 /* ─── Animated Word Reveal ─── */
 function AnimatedHeadline() {
@@ -79,23 +173,28 @@ function MagneticButton({
   );
 }
 
-/* ─── Dashboard Mockup (replaces Spline for reliability) ─── */
+/* ─── Dashboard Mockup with enhanced 3D perspective ─── */
 function DashboardMockup() {
   return (
     <motion.div
-      initial={{ opacity: 0, x: 60, rotateY: -5 }}
-      animate={{ opacity: 1, x: 0, rotateY: 0 }}
+      initial={{ opacity: 0, x: 60, rotateY: -8 }}
+      animate={{ opacity: 1, x: 0, rotateY: -4 }}
       transition={{ type: "spring", stiffness: 60, damping: 20, delay: 0.4 }}
-      className="relative w-full perspective-distant"
+      className="relative w-full"
+      style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
     >
-      {/* Glow */}
-      <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-accent-400/15 rounded-full blur-[120px]" />
+      {/* Glow — larger + more intense */}
+      <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-140 h-140 bg-accent-400/20 rounded-full blur-[150px] animate-drift" />
 
-      {/* Browser Chrome */}
+      {/* Browser Chrome with 3D tilt */}
       <motion.div
         animate={{ y: [0, -8, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className="bg-glass-white-strong backdrop-blur-xl rounded-2xl border border-glass-border shadow-(--shadow-glass) overflow-hidden"
+        style={{
+          transform: "rotateY(-6deg) rotateX(3deg)",
+          transformStyle: "preserve-3d",
+        }}
+        className="bg-glass-white-strong backdrop-blur-xl rounded-2xl border border-glass-border shadow-[0_20px_60px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.6)] overflow-hidden"
       >
         {/* Title bar */}
         <div className="flex items-center gap-2 px-4 py-3 border-b border-zinc-100 bg-zinc-50/80">
@@ -228,18 +327,154 @@ function DashboardMockup() {
   );
 }
 
+/* ─── Infinity Symbol Video Background ─── */
+function InfinityBackground({ parallaxY }: { parallaxY: MotionValue<number> }) {
+  return (
+    <motion.div
+      style={{ y: parallaxY }}
+      className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none"
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
+        className="relative w-[700px] h-[700px] lg:w-[900px] lg:h-[900px] animate-subtle-rotate"
+      >
+        <video
+          src="/hero/infinity-symbol.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-contain opacity-30 blur-[1px]"
+        />
+        {/* Soft radial mask to feather edges */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(circle, transparent 30%, var(--color-background) 75%)",
+          }}
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ─── Floating card data ─── */
+const floatingCards: FloatingCardProps[] = [
+  // Left side cards
+  {
+    src: "/videos/ugc-1.mp4",
+    type: "video",
+    className: "hidden lg:block -left-8 top-[18%] w-[130px] h-[185px]",
+    rotateX: 5,
+    rotateY: 15,
+    rotateZ: -6,
+    delay: 0,
+    duration: 7,
+  },
+  {
+    src: "/avatars/ai-avatar-3.jpg",
+    type: "avatar",
+    className: "hidden lg:block left-[2%] bottom-[15%] w-[110px] h-[140px]",
+    rotateX: -4,
+    rotateY: 12,
+    rotateZ: 4,
+    delay: 0.3,
+    duration: 8,
+  },
+  {
+    src: "/videos/ugc-3.mp4",
+    type: "video",
+    className: "hidden xl:block left-[8%] top-[55%] w-[105px] h-[150px]",
+    rotateX: 3,
+    rotateY: 8,
+    rotateZ: -3,
+    delay: 0.6,
+    duration: 9,
+  },
+  // Right side cards
+  {
+    src: "/avatars/ai-avatar-5.jpg",
+    type: "avatar",
+    className: "hidden lg:block -right-4 top-[12%] w-[120px] h-[155px]",
+    rotateX: -3,
+    rotateY: -14,
+    rotateZ: 5,
+    delay: 0.15,
+    duration: 7.5,
+  },
+  {
+    src: "/videos/ugc-5.mp4",
+    type: "video",
+    className: "hidden lg:block right-[1%] bottom-[18%] w-[125px] h-[175px]",
+    rotateX: 4,
+    rotateY: -10,
+    rotateZ: -4,
+    delay: 0.45,
+    duration: 8.5,
+  },
+  {
+    src: "/avatars/ai-avatar-7.jpg",
+    type: "avatar",
+    className: "hidden xl:block right-[7%] top-[50%] w-[100px] h-[130px]",
+    rotateX: -5,
+    rotateY: -8,
+    rotateZ: 3,
+    delay: 0.7,
+    duration: 9.5,
+  },
+];
+
 /* ─── Hero Section ─── */
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  // Parallax transforms — different rates for depth
+  const infinityY = useTransform(scrollYProgress, [0, 1], [0, -120]);
+  const cardsY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+
   return (
     <section
+      ref={sectionRef}
       id="hero"
       className="relative min-h-dvh flex items-center overflow-hidden"
+      style={{ perspective: "2000px" }}
     >
-      {/* Background subtle gradient */}
+      {/* ── Background layers ── */}
       <div className="absolute inset-0 -z-20 bg-linear-to-b from-accent-50/30 via-transparent to-transparent" />
 
-      <div className="max-w-350 mx-auto w-full px-6 lg:px-12 pt-24 pb-16 lg:pb-0">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      {/* Atmospheric glow orbs */}
+      <div className="absolute -z-15 inset-0 pointer-events-none overflow-hidden">
+        {/* Top-left blue orb */}
+        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-accent-400/8 rounded-full blur-[180px] animate-drift" />
+        {/* Center-right warm orb */}
+        <div className="absolute top-1/3 -right-20 w-[600px] h-[600px] bg-accent-300/6 rounded-full blur-[200px] animate-drift-reverse" />
+        {/* Bottom-center subtle orb */}
+        <div className="absolute -bottom-40 left-1/3 w-[500px] h-[500px] bg-accent-500/5 rounded-full blur-[180px] animate-drift" />
+      </div>
+
+      {/* Infinity symbol video background */}
+      <InfinityBackground parallaxY={infinityY} />
+
+      {/* ── Floating Video Cards ── */}
+      <motion.div style={{ y: cardsY }} className="absolute inset-0 z-10 pointer-events-none">
+        {floatingCards.map((card, i) => (
+          <FloatingVideoCard key={i} {...card} />
+        ))}
+      </motion.div>
+
+      {/* ── Main Content ── */}
+      <div className="relative z-20 max-w-350 mx-auto w-full px-6 lg:px-12 pt-24 pb-16 lg:pb-0">
+        <div
+          className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center"
+          style={{ transformStyle: "preserve-3d" }}
+        >
           {/* Left — Copy */}
           <div className="max-w-xl">
             {/* Tag */}
@@ -319,8 +554,8 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* Right — Product Mockup */}
-          <div className="relative lg:pl-4">
+          {/* Right — Product Mockup with 3D depth */}
+          <div className="relative lg:pl-4" style={{ transformStyle: "preserve-3d" }}>
             <DashboardMockup />
           </div>
         </div>
