@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { motion, useMotionValue, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Lightning, Play } from "@phosphor-icons/react";
 import { useRef } from "react";
 
@@ -327,41 +327,6 @@ function DashboardMockup() {
   );
 }
 
-/* ─── Infinity Symbol Video Background ─── */
-function InfinityBackground({ parallaxY }: { parallaxY: MotionValue<number> }) {
-  return (
-    <motion.div
-      style={{ y: parallaxY }}
-      className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none"
-    >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.85 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
-        className="relative w-[800px] h-[800px] lg:w-[1100px] lg:h-[1100px] animate-subtle-rotate"
-      >
-        <video
-          src="/hero/infinity-symbol.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-contain opacity-60"
-          style={{ filter: "drop-shadow(0 0 80px rgba(59, 130, 246, 0.15))" }}
-        />
-        {/* Soft radial mask to feather edges into page bg */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 70% at 50% 50%, transparent 40%, var(--color-background) 78%)",
-          }}
-        />
-      </motion.div>
-    </motion.div>
-  );
-}
-
 /* ─── Floating card data ─── */
 const floatingCards: FloatingCardProps[] = [
   // Left side cards
@@ -436,8 +401,7 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  // Parallax transforms — different rates for depth
-  const infinityY = useTransform(scrollYProgress, [0, 1], [0, -120]);
+  // Parallax transform for floating cards
   const cardsY = useTransform(scrollYProgress, [0, 1], [0, -60]);
 
   return (
@@ -459,9 +423,6 @@ export default function Hero() {
         {/* Bottom-center subtle orb */}
         <div className="absolute -bottom-40 left-1/3 w-[500px] h-[500px] bg-accent-500/5 rounded-full blur-[180px] animate-drift" />
       </div>
-
-      {/* Infinity symbol video background */}
-      <InfinityBackground parallaxY={infinityY} />
 
       {/* ── Floating Video Cards ── */}
       <motion.div style={{ y: cardsY }} className="absolute inset-0 z-10 pointer-events-none">
