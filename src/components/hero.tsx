@@ -341,7 +341,7 @@ function InfinityBackground({ parallaxY }: { parallaxY: MotionValue<number> }) {
         className="relative w-[700px] h-[700px] lg:w-[900px] lg:h-[900px] animate-subtle-rotate"
       >
         <video
-          src="/hero/infinity-symbol.mp4"
+          src="/hero/Animated_Ice_Infinity_Symbol_Video.mp4"
           autoPlay
           loop
           muted
