@@ -335,25 +335,26 @@ function InfinityBackground({ parallaxY }: { parallaxY: MotionValue<number> }) {
       className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none"
     >
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-        className="relative w-[700px] h-[700px] lg:w-[900px] lg:h-[900px] animate-subtle-rotate"
+        transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
+        className="relative w-[800px] h-[800px] lg:w-[1100px] lg:h-[1100px] animate-subtle-rotate"
       >
         <video
-          src="/hero/Animated_Ice_Infinity_Symbol_Video.mp4"
+          src="/hero/infinity-symbol.mp4"
           autoPlay
           loop
           muted
           playsInline
-          className="w-full h-full object-contain opacity-30 blur-[1px]"
+          className="w-full h-full object-contain opacity-60"
+          style={{ filter: "drop-shadow(0 0 80px rgba(59, 130, 246, 0.15))" }}
         />
-        {/* Soft radial mask to feather edges */}
+        {/* Soft radial mask to feather edges into page bg */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(circle, transparent 30%, var(--color-background) 75%)",
+              "radial-gradient(ellipse 70% 70% at 50% 50%, transparent 40%, var(--color-background) 78%)",
           }}
         />
       </motion.div>
