@@ -5,25 +5,25 @@
   --color-background: #fafafa;
   --color-foreground: #18181b;
 
-  /* Electric Blue accent palette (saturation < 80%) */
-  --color-accent-50: #eff6ff;
-  --color-accent-100: #dbeafe;
-  --color-accent-200: #bfdbfe;
-  --color-accent-300: #93c5fd;
-  --color-accent-400: #60a5fa;
-  --color-accent-500: #3b82f6;
-  --color-accent-600: #2563eb;
-  --color-accent-700: #1d4ed8;
-  --color-accent-800: #1e40af;
-  --color-accent-900: #1e3a8a;
-  --color-accent-950: #172554;
+  /* Ice Blue accent palette */
+  --color-accent-50: #f0f9ff;
+  --color-accent-100: #e0f2fe;
+  --color-accent-200: #bae6fd;
+  --color-accent-300: #7dd3fc;
+  --color-accent-400: #38bdf8;
+  --color-accent-500: #0ea5e9;
+  --color-accent-600: #0284c7;
+  --color-accent-700: #0369a1;
+  --color-accent-800: #075985;
+  --color-accent-900: #0c4a6e;
+  --color-accent-950: #082f49;
 
   /* Glass token colors */
   --color-glass-white: rgba(255, 255, 255, 0.55);
   --color-glass-white-strong: rgba(255, 255, 255, 0.72);
   --color-glass-border: rgba(255, 255, 255, 0.35);
   --color-glass-dark: rgba(24, 24, 27, 0.45);
-  --color-glass-accent: rgba(59, 130, 246, 0.12);
+  --color-glass-accent: rgba(14, 165, 233, 0.12);
 
   /* Fonts */
   --font-sans: var(--font-outfit), system-ui, -apple-system, sans-serif;

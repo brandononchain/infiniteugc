@@ -3,6 +3,7 @@
 import { motion, useMotionValue, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Lightning, Play } from "@phosphor-icons/react";
 import { useRef } from "react";
+import GradientBackground from "./gradient-background";
 
 /* ─── Floating Video Card ─── */
 interface FloatingCardProps {
@@ -411,18 +412,11 @@ export default function Hero() {
       className="relative min-h-dvh flex items-center overflow-hidden"
       style={{ perspective: "2000px" }}
     >
-      {/* ── Background layers ── */}
-      <div className="absolute inset-0 -z-20 bg-linear-to-b from-accent-50/30 via-transparent to-transparent" />
+      {/* ── WebGL Cinematic Ice Gradient Background ── */}
+      <GradientBackground className="-z-20" />
 
-      {/* Atmospheric glow orbs */}
-      <div className="absolute -z-15 inset-0 pointer-events-none overflow-hidden">
-        {/* Top-left blue orb */}
-        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-accent-400/8 rounded-full blur-[180px] animate-drift" />
-        {/* Center-right warm orb */}
-        <div className="absolute top-1/3 -right-20 w-[600px] h-[600px] bg-accent-300/6 rounded-full blur-[200px] animate-drift-reverse" />
-        {/* Bottom-center subtle orb */}
-        <div className="absolute -bottom-40 left-1/3 w-[500px] h-[500px] bg-accent-500/5 rounded-full blur-[180px] animate-drift" />
-      </div>
+      {/* Bottom fade into page background */}
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent -z-10 pointer-events-none" />
 
       {/* ── Floating Video Cards ── */}
       <motion.div style={{ y: cardsY }} className="absolute inset-0 z-10 pointer-events-none">
