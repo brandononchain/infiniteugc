@@ -114,7 +114,7 @@ const CAROUSEL_VIDEOS = [
   { src: "/videos/ugc-3.mp4", name: "Priya M.", caption: "POV: you finally found THE product", views: "2.1M", platform: "TikTok" },
   { src: "/videos/ugc-4.mp4", name: "Dani R.", caption: "Link in bio for 20% off 🔥", views: "536K", platform: "Shorts" },
   { src: "/videos/ugc-5.mp4", name: "Mika S.", caption: "Why everyone is switching to this", views: "1.8M", platform: "TikTok" },
-  { src: "/videos/ugc-6.mp4", name: "Ayla B.", caption: "Before vs after — no filter", views: "3.4M", platform: "Reels" },
+  { src: "/videos/ugc-6.mp4", name: "Ayla B.", caption: "Before vs after, no filter", views: "3.4M", platform: "Reels" },
   { src: "/videos/ugc-7.mp4", name: "Carlos V.", caption: "Top 3 things nobody tells you", views: "672K", platform: "Shorts" },
   { src: "/videos/ugc-8.mp4", name: "Nina W.", caption: "This is NOT sponsored btw", views: "1.5M", platform: "TikTok" },
 ];
@@ -417,7 +417,7 @@ const features = [
   },
   {
     title: "300+ AI Avatars",
-    desc: "Diverse, realistic AI presenters — or clone your own face and voice.",
+    desc: "Diverse, realistic AI presenters, or clone your own face and voice.",
     icon: Users,
     span: "",
     content: "avatars",
@@ -438,14 +438,14 @@ const features = [
   },
   {
     title: "Built-in Video Editor",
-    desc: "Trim, cut, layer, and polish — all inside Infinite UGC. No external tools needed.",
+    desc: "Trim, cut, layer, and polish, all inside Infinite UGC. No external tools needed.",
     icon: Scissors,
     span: "",
     content: "editor",
   },
   {
     title: "Agent Templates",
-    desc: "One-click video styles for every use case — reviews, ecommerce, services, ads, and more.",
+    desc: "One-click video styles for every use case: reviews, ecommerce, services, ads, and more.",
     icon: SquaresFour,
     span: "",
     content: "templates",
@@ -481,7 +481,7 @@ export default function Features() {
             Everything You Need to Dominate Content
           </h2>
           <p className="text-lg text-zinc-500 leading-relaxed mt-4 max-w-[55ch]">
-            A complete toolkit for AI-powered video production — from single
+            A complete toolkit for AI-powered video production, from single
             clips to enterprise-scale campaigns.
           </p>
         </motion.div>

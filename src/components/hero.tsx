@@ -295,7 +295,7 @@ function DashboardMockup() {
                     Avatar
                   </label>
                   <div className="mt-1 bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-xs text-zinc-700 flex justify-between items-center">
-                    <span>Maria V. — Casual</span>
+                    <span>Maria V. · Casual</span>
                     <span className="text-zinc-400 text-[10px]">v</span>
                   </div>
                 </div>
@@ -463,7 +463,7 @@ export default function Hero() {
               className="text-lg text-zinc-500 leading-relaxed max-w-[55ch] mt-6"
             >
               Generate thousands of AI avatar videos, custom campaigns, and ad
-              creatives — from script to export. Built for brands that move fast
+              creatives, from script to export. Built for brands that move fast
               and need content yesterday.
             </motion.p>
 

@@ -19,7 +19,7 @@ const faqs = [
   },
   {
     q: "What is the AI Agent and how does it work?",
-    a: "The AI Agent is a conversational interface where you describe what you want in plain language — for example, \"Create 30 TikTok testimonials for my skincare line in English and Spanish.\" The agent handles scripting, avatar selection, rendering, and export autonomously.",
+    a: "The AI Agent is a conversational interface where you describe what you want in plain language. For example, \"Create 30 TikTok testimonials for my skincare line in English and Spanish.\" The agent handles scripting, avatar selection, rendering, and export autonomously.",
   },
   {
     q: "How many languages are supported?",
@@ -39,7 +39,7 @@ const faqs = [
   },
   {
     q: "What is your refund policy?",
-    a: "If you sign up and decide the platform is not the right fit before using your video credits, we will issue a full refund — no questions asked. Contact support within 7 days of purchase.",
+    a: "If you sign up and decide the platform is not the right fit before using your video credits, we will issue a full refund, no questions asked. Contact support within 7 days of purchase.",
   },
 ];
 

@@ -27,7 +27,7 @@ const steps = [
   {
     num: "03",
     title: "Generate & Export",
-    desc: "Hit generate — your video is ready in under 2 minutes. Add captions, overlays, music, and B-roll, then export in any format. Batch-create hundreds at once.",
+    desc: "Hit generate. Your video is ready in under 2 minutes. Add captions, overlays, music, and B-roll, then export in any format. Batch-create hundreds at once.",
     icon: FilmSlate,
     visual: "export",
   },
@@ -35,13 +35,13 @@ const steps = [
 
 /* ─── Step Visual Components ─── */
 const SCRIPT_LINES = [
-  { type: "label", text: "[HOOK — 0:00-0:03]" },
+  { type: "label", text: "[HOOK: 0:00-0:03]" },
   { type: "body", text: "\"Wait, you're still editing videos manually?\"" },
-  { type: "label", text: "[PROBLEM — 0:03-0:08]" },
+  { type: "label", text: "[PROBLEM: 0:03-0:08]" },
   { type: "body", text: "\"I used to spend 6 hours on a single TikTok. Finding creators, writing scripts, going back and forth on edits...\"" },
-  { type: "label", text: "[SOLUTION — 0:08-0:15]" },
-  { type: "body", text: "\"Then I found Infinite UGC. Now I generate 50 videos before lunch — all with AI avatars that look completely real.\"" },
-  { type: "label", text: "[CTA — 0:15-0:18]" },
+  { type: "label", text: "[SOLUTION: 0:08-0:15]" },
+  { type: "body", text: "\"Then I found Infinite UGC. Now I generate 50 videos before lunch, all with AI avatars that look completely real.\"" },
+  { type: "label", text: "[CTA: 0:15-0:18]" },
   { type: "body", text: "\"Link in bio. Seriously, this will change how you make content.\"" },
 ];
 
@@ -111,7 +111,7 @@ const LiveScriptEditor = memo(function LiveScriptEditor() {
 
       {/* Footer bar */}
       <div className="flex items-center justify-between px-4 py-2 border-t border-white/20 bg-white/30 text-[10px] text-zinc-400">
-        <span>TikTok Ad — 18s</span>
+        <span>TikTok Ad · 18s</span>
         <span className="text-accent-600 font-medium">
           {Math.min(Math.round((visibleChars / fullText.length) * 100), 100)}% generated
         </span>
@@ -172,7 +172,7 @@ function AvatarVisual() {
         transition={{ delay: 0.6 }}
         className="mt-4 flex items-center justify-between"
       >
-        <span className="text-xs text-zinc-500">Aisha M. — selected</span>
+        <span className="text-xs text-zinc-500">Aisha M. · selected</span>
         <span className="text-xs text-accent-600 font-medium">300+ more →</span>
       </motion.div>
     </div>

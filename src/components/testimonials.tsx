@@ -26,7 +26,7 @@ const testimonials = [
   },
   {
     quote:
-      "The AI agent is unlike anything I've seen. I told it to localize our top ad into 8 languages with matching avatars — done in 11 minutes. Absolute game changer.",
+      "The AI agent is unlike anything I've seen. I told it to localize our top ad into 8 languages with matching avatars. Done in 11 minutes. Absolute game changer.",
     metric: "8 markets in 11 min",
     name: "Seo-yun Park",
     role: "Paid Acquisition Lead",

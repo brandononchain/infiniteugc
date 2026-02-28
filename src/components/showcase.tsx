@@ -35,7 +35,7 @@ export default function Showcase() {
           </h2>
           <p className="text-lg text-zinc-400 mt-4 max-w-[50ch] mx-auto">
             From script to finished video in under two minutes. No editing
-            skills required — the AI handles everything.
+            skills required. The AI handles everything.
           </p>
         </motion.div>
 
