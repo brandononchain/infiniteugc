@@ -23,101 +23,122 @@ export default function Navbar() {
 
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          scrolled
-            ? "bg-glass-white-strong backdrop-blur-2xl shadow-(--shadow-glass) border-b border-glass-border"
-            : "bg-transparent"
-        }`}
-      >
-        <div className="max-w-350 mx-auto flex items-center justify-between px-6 lg:px-12 h-16">
-          {/* Logo */}
-          <a href="#" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 bg-zinc-950 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
-              <Infinity size={20} weight="bold" className="text-white" />
+      {/* Spacer so the fixed nav doesn't overlap hero on small viewports */}
+      <div className="h-0" />
+
+      <nav className="fixed top-0 left-0 right-0 z-40 flex justify-center pointer-events-none">
+        <motion.div
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.1 }}
+          className={`pointer-events-auto w-[calc(100%-2rem)] max-w-4xl mt-4 transition-all duration-500 ${
+            scrolled
+              ? "bg-white/75 shadow-[0_4px_24px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.04)] border border-white/60"
+              : "bg-white/50 border border-white/40"
+          } backdrop-blur-2xl backdrop-saturate-150 rounded-2xl`}
+        >
+          <div className="flex items-center justify-between px-5 sm:px-6 h-14">
+            {/* Logo */}
+            <a href="#" className="flex items-center gap-2 group shrink-0">
+              <div className="w-8 h-8 bg-zinc-950 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Infinity size={17} weight="bold" className="text-white" />
+              </div>
+              <span className="text-base font-bold tracking-tight text-zinc-950">
+                Infinite UGC
+              </span>
+            </a>
+
+            {/* Desktop Nav Links */}
+            <div className="hidden md:flex items-center gap-1">
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="text-[13px] font-medium text-zinc-500 hover:text-zinc-950 transition-colors px-3.5 py-1.5 rounded-lg hover:bg-zinc-950/[0.04]"
+                >
+                  {link.label}
+                </a>
+              ))}
             </div>
-            <span className="text-lg font-bold tracking-tight text-zinc-950">
-              Infinite UGC
-            </span>
-          </a>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
+            {/* Desktop CTA */}
+            <div className="hidden md:flex items-center gap-3 shrink-0">
               <a
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium text-zinc-500 hover:text-zinc-950 transition-colors"
+                href="#"
+                className="text-[13px] font-medium text-zinc-500 hover:text-zinc-950 transition-colors px-3 py-1.5"
               >
-                {link.label}
+                Sign In
               </a>
-            ))}
-          </div>
+              <a
+                href="#"
+                className="inline-flex items-center gap-1.5 bg-zinc-950 hover:bg-zinc-800 text-white text-[13px] font-semibold px-5 py-2 rounded-xl transition-all active:scale-[0.97]"
+              >
+                Get Started
+              </a>
+            </div>
 
-          {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-4">
-            <a
-              href="#"
-              className="text-sm font-medium text-zinc-600 hover:text-zinc-950 transition-colors"
+            {/* Mobile Toggle */}
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="md:hidden p-2 -mr-2 text-zinc-600 hover:text-zinc-950 transition-colors"
+              aria-label="Toggle menu"
             >
-              Sign In
-            </a>
-            <a
-              href="#"
-              className="inline-flex items-center gap-2 bg-accent-600/90 backdrop-blur-sm hover:bg-accent-700 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-all active:scale-[0.97] shadow-lg shadow-accent-600/20"
-            >
-              Get Started
-            </a>
+              {mobileOpen ? <X size={22} /> : <List size={22} />}
+            </button>
           </div>
-
-          {/* Mobile Toggle */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 text-zinc-700 hover:text-zinc-950 transition-colors"
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X size={24} /> : <List size={24} />}
-          </button>
-        </div>
+        </motion.div>
       </nav>
 
       {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed inset-x-0 top-16 z-30 bg-white/95 backdrop-blur-xl border-b border-zinc-200/50 shadow-lg md:hidden"
-          >
-            <div className="flex flex-col p-6 gap-4">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-base font-medium text-zinc-700 hover:text-zinc-950 transition-colors py-2"
-                >
-                  {link.label}
-                </a>
-              ))}
-              <div className="flex flex-col gap-3 pt-4 border-t border-zinc-200/50">
-                <a
-                  href="#"
-                  className="text-sm font-medium text-zinc-600 text-center py-2"
-                >
-                  Sign In
-                </a>
-                <a
-                  href="#"
-                  className="inline-flex items-center justify-center gap-2 bg-accent-600 text-white text-sm font-semibold px-5 py-2.5 rounded-full"
-                >
-                  Get Started
-                </a>
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setMobileOpen(false)}
+              className="fixed inset-0 z-30 bg-black/20 backdrop-blur-sm md:hidden"
+            />
+
+            {/* Panel */}
+            <motion.div
+              initial={{ opacity: 0, y: -8, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              className="fixed left-4 right-4 top-[5.5rem] z-40 bg-white/90 backdrop-blur-2xl backdrop-saturate-150 border border-white/60 shadow-[0_8px_40px_rgba(0,0,0,0.08)] rounded-2xl overflow-hidden md:hidden"
+            >
+              <div className="flex flex-col p-4 gap-1">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="text-[15px] font-medium text-zinc-700 hover:text-zinc-950 hover:bg-zinc-950/[0.04] transition-colors py-2.5 px-3 rounded-xl"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+                <div className="flex flex-col gap-2 pt-3 mt-2 border-t border-zinc-200/50">
+                  <a
+                    href="#"
+                    className="text-[15px] font-medium text-zinc-500 text-center py-2.5 hover:text-zinc-950 transition-colors"
+                  >
+                    Sign In
+                  </a>
+                  <a
+                    href="#"
+                    className="inline-flex items-center justify-center bg-zinc-950 hover:bg-zinc-800 text-white text-[15px] font-semibold px-5 py-2.5 rounded-xl transition-all active:scale-[0.97]"
+                  >
+                    Get Started
+                  </a>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
