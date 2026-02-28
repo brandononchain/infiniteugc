@@ -71,7 +71,7 @@ export default function Navbar() {
               </a>
               <a
                 href="#"
-                className="inline-flex items-center gap-1.5 bg-zinc-950 hover:bg-zinc-800 text-white text-[13px] font-semibold px-5 py-2 rounded-xl transition-all active:scale-[0.97]"
+                className="btn-ice inline-flex items-center gap-1.5 text-white text-[13px] font-semibold px-5 py-2 rounded-xl transition-all active:scale-[0.97] shadow-(--shadow-accent-glow)"
               >
                 Get Started
               </a>
@@ -131,7 +131,7 @@ export default function Navbar() {
                   </a>
                   <a
                     href="#"
-                    className="inline-flex items-center justify-center bg-zinc-950 hover:bg-zinc-800 text-white text-[15px] font-semibold px-5 py-2.5 rounded-xl transition-all active:scale-[0.97]"
+                    className="btn-ice inline-flex items-center justify-center text-white text-[15px] font-semibold px-5 py-2.5 rounded-xl transition-all active:scale-[0.97] shadow-(--shadow-accent-glow)"
                   >
                     Get Started
                   </a>

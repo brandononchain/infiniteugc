@@ -163,9 +163,9 @@ function MagneticButton({
       onMouseLeave={reset}
       style={{ x, y }}
       transition={{ type: "spring", stiffness: 200, damping: 20 }}
-      className={`inline-flex items-center gap-2 font-semibold text-sm px-7 py-3.5 rounded-full transition-colors active:scale-[0.97] ${
+      className={`inline-flex items-center gap-2 font-semibold text-sm px-7 py-3.5 rounded-full transition-all active:scale-[0.97] ${
         isPrimary
-          ? "bg-accent-600/90 backdrop-blur-sm hover:bg-accent-700 text-white shadow-lg shadow-accent-600/20"
+          ? "btn-ice shadow-(--shadow-accent-glow-lg) hover:shadow-(--shadow-accent-glow-lg)"
           : "border border-glass-border text-zinc-700 hover:border-zinc-400 hover:text-zinc-950 bg-glass-white backdrop-blur-xl shadow-(--shadow-glass)"
       }`}
     >
@@ -443,7 +443,7 @@ export default function Hero() {
                 damping: 20,
                 delay: 0,
               }}
-              className="inline-flex items-center gap-2 rounded-full bg-glass-white backdrop-blur-xl text-accent-700 border border-glass-border px-4 py-1.5 text-sm font-medium mb-6 shadow-(--shadow-glass)"
+              className="inline-flex items-center gap-2 rounded-full badge-ice backdrop-blur-xl text-accent-700 px-4 py-1.5 text-sm font-medium mb-6 shadow-(--shadow-glass)"
             >
               <Lightning size={16} weight="fill" />
               AI-Powered Video at Scale

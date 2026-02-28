@@ -51,7 +51,7 @@ export default function FinalCTA() {
               <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-4 md:justify-end">
                 <a
                   href="#"
-                  className="inline-flex items-center justify-center gap-2 bg-accent-500/90 hover:bg-accent-600 backdrop-blur-sm text-white font-semibold text-sm px-8 py-4 rounded-full transition-all active:scale-[0.97] shadow-lg shadow-accent-500/25 ring-1 ring-white/10"
+                  className="btn-ice inline-flex items-center justify-center gap-2 backdrop-blur-sm text-white font-semibold text-sm px-8 py-4 rounded-full transition-all active:scale-[0.97] shadow-(--shadow-accent-glow-lg) ring-1 ring-white/10"
                 >
                   Get Started Free
                   <ArrowRight size={16} weight="bold" />

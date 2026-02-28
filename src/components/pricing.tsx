@@ -155,7 +155,7 @@ export default function Pricing() {
               {/* Badge */}
               {plan.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="text-xs font-semibold bg-accent-500 text-white px-4 py-1.5 rounded-full shadow-lg shadow-accent-500/20">
+                  <span className="btn-ice text-xs font-semibold text-white px-4 py-1.5 rounded-full shadow-(--shadow-accent-glow)">
                     {plan.badge}
                   </span>
                 </div>
@@ -234,7 +234,7 @@ export default function Pricing() {
                 href="#"
                 className={`inline-flex items-center justify-center gap-2 font-semibold text-sm px-6 py-3 rounded-full transition-all active:scale-[0.97] ${
                   plan.accent
-                    ? "bg-accent-500/90 hover:bg-accent-600 text-white backdrop-blur-sm shadow-lg shadow-accent-500/20"
+                    ? "btn-ice shadow-(--shadow-accent-glow-lg)"
                     : "bg-zinc-950/90 hover:bg-zinc-900 text-white backdrop-blur-sm"
                 }`}
               >
