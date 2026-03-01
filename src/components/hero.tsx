@@ -129,7 +129,7 @@ function OrbitCarousel() {
         >
           <Image
             src="/hero/infinityloop.png"
-            alt="Infinite UGC"
+            alt="OpenUGC"
             width={900}
             height={900}
             priority
