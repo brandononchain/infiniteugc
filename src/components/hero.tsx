@@ -49,8 +49,8 @@ function OrbitCarousel() {
 
       const cw = box.offsetWidth;
       const ch = box.offsetHeight;
-      const rx = cw * 0.48; // horizontal radius
-      const ry = ch * 0.13; // vertical radius (tilt)
+      const rx = cw * 0.52; // horizontal radius
+      const ry = ch * 0.15; // vertical radius (tilt)
 
       /* Collect positions for z-sorting */
       const items: { i: number; depth: number; x: number; y: number }[] = [];
@@ -73,9 +73,9 @@ function OrbitCarousel() {
         if (!el) continue;
 
         const dn = (depth + 1) / 2; // 0 (far) → 1 (near)
-        const scale = 0.55 + dn * 0.45;
-        const opacity = 0.15 + dn * 0.85;
-        const blur = (1 - dn) * 4;
+        const scale = 0.65 + dn * 0.35;
+        const opacity = 0.35 + dn * 0.65;
+        const blur = (1 - dn) * 2.5;
         /* Front cards above infinity loop (z-30), back cards behind */
         const zIndex = depth > 0 ? 50 + zi : zi;
 
@@ -87,8 +87,8 @@ function OrbitCarousel() {
         /* Smart play/pause based on depth */
         const vid = videoRefs.current[i];
         if (vid) {
-          if (dn > 0.35 && vid.paused) vid.play().catch(() => {});
-          else if (dn <= 0.35 && !vid.paused) vid.pause();
+          if (dn > 0.25 && vid.paused) vid.play().catch(() => {});
+          else if (dn <= 0.25 && !vid.paused) vid.pause();
         }
       }
 
@@ -108,7 +108,7 @@ function OrbitCarousel() {
       {/* Subtle orbit track */}
       <div
         className="absolute top-1/2 left-1/2 border border-accent-300/[0.08] rounded-[50%] pointer-events-none"
-        style={{ width: "96%", height: "26%", transform: "translate(-50%, -50%)" }}
+        style={{ width: "104%", height: "30%", transform: "translate(-50%, -50%)" }}
       />
 
       {/* Accent glows */}
@@ -145,7 +145,7 @@ function OrbitCarousel() {
           ref={(el) => {
             cardEls.current[i] = el;
           }}
-          className={`absolute top-1/2 left-1/2 -ml-[60px] -mt-[85px] w-[120px] h-[170px] transition-opacity duration-700 ${
+          className={`absolute top-1/2 left-1/2 -ml-[80px] -mt-[112px] w-[160px] h-[225px] transition-opacity duration-700 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
           style={{ willChange: "transform, opacity, filter" }}
