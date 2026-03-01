@@ -3,6 +3,7 @@
 import { motion, useMotionValue, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Lightning, Play } from "@phosphor-icons/react";
 import { useRef } from "react";
+import Image from "next/image";
 import GradientBackground from "./gradient-background";
 
 /* ─── Floating Video Card ─── */
@@ -174,155 +175,33 @@ function MagneticButton({
   );
 }
 
-/* ─── Dashboard Mockup with enhanced 3D perspective ─── */
-function DashboardMockup() {
+/* ─── Hero Visual — Infinity Loop ─── */
+function HeroVisual() {
   return (
     <motion.div
-      initial={{ opacity: 0, x: 60, rotateY: -8 }}
-      animate={{ opacity: 1, x: 0, rotateY: -4 }}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
       transition={{ type: "spring", stiffness: 60, damping: 20, delay: 0.4 }}
-      className="relative w-full"
-      style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
+      className="relative w-full flex items-center justify-center"
     >
-      {/* Glow — larger + more intense */}
-      <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-140 h-140 bg-accent-400/20 rounded-full blur-[150px] animate-drift" />
+      {/* Accent glow behind the image */}
+      <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] bg-accent-400/15 rounded-full blur-[100px] animate-drift" />
+      <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-accent-300/20 rounded-full blur-[80px] animate-drift-reverse" />
 
-      {/* Browser Chrome with 3D tilt */}
+      {/* Floating animation wrapper */}
       <motion.div
-        animate={{ y: [0, -8, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        style={{
-          transform: "rotateY(-6deg) rotateX(3deg)",
-          transformStyle: "preserve-3d",
-        }}
-        className="bg-glass-white-strong backdrop-blur-xl rounded-2xl border border-glass-border shadow-[0_20px_60px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.6)] overflow-hidden"
+        animate={{ y: [0, -12, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        className="relative w-full max-w-lg"
       >
-        {/* Title bar */}
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-zinc-100 bg-zinc-50/80">
-          <div className="flex gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-zinc-300" />
-            <div className="w-3 h-3 rounded-full bg-zinc-300" />
-            <div className="w-3 h-3 rounded-full bg-zinc-300" />
-          </div>
-          <div className="flex-1 text-center">
-            <div className="inline-block bg-zinc-100 rounded-md px-12 py-1 text-xs text-zinc-400 font-mono">
-              app.infiniteugc.com
-            </div>
-          </div>
-        </div>
-
-        {/* Dashboard Content */}
-        <div className="grid grid-cols-[200px_1fr] min-h-85 max-h-100">
-          {/* Sidebar */}
-          <div className="border-r border-zinc-100 py-4 px-3">
-            <div className="flex items-center gap-2 px-2 mb-6">
-              <div className="w-7 h-7 bg-zinc-950 rounded-lg flex items-center justify-center">
-                <span className="text-white text-xs font-bold">U</span>
-              </div>
-              <span className="text-xs font-semibold text-zinc-700">
-                Infinite UGC
-              </span>
-            </div>
-            {[
-              { label: "Dashboard", active: false },
-              { label: "Create Video", active: true },
-              { label: "Campaigns", active: false },
-              { label: "Avatars", active: false },
-              { label: "Scripts", active: false },
-              { label: "Exports", active: false },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className={`text-xs px-3 py-2 rounded-lg mb-0.5 ${
-                  item.active
-                    ? "bg-accent-50 text-accent-700 font-semibold"
-                    : "text-zinc-500"
-                }`}
-              >
-                {item.label}
-              </div>
-            ))}
-          </div>
-
-          {/* Main area */}
-          <div className="p-5">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="text-sm font-semibold text-zinc-800">
-                  Create Video
-                </h3>
-                <p className="text-xs text-zinc-400 mt-0.5">
-                  Configure settings and generate AI content
-                </p>
-              </div>
-              <div className="flex gap-1.5">
-                <div className="text-[10px] px-2.5 py-1 rounded-md bg-zinc-100 text-zinc-500 font-medium">
-                  9:16
-                </div>
-                <div className="text-[10px] px-2.5 py-1 rounded-md border border-zinc-200 text-zinc-400 font-medium">
-                  16:9
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              {/* Preview */}
-              <div className="bg-zinc-50 rounded-xl p-3 flex flex-col items-center justify-center border border-zinc-100">
-                <div className="w-full aspect-9/14 max-h-50 bg-linear-to-br from-zinc-200 to-zinc-300 rounded-lg relative overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-10 h-10 bg-white/80 rounded-full flex items-center justify-center backdrop-blur-sm">
-                      <Play size={16} weight="fill" className="text-zinc-600 ml-0.5" />
-                    </div>
-                  </div>
-                  <div className="absolute bottom-2 right-2 bg-zinc-950/70 text-white text-[9px] px-1.5 py-0.5 rounded font-mono">
-                    0:23
-                  </div>
-                </div>
-              </div>
-
-              {/* Form */}
-              <div className="space-y-3">
-                <div>
-                  <label className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider">
-                    Campaign Name
-                  </label>
-                  <div className="mt-1 bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-xs text-zinc-700">
-                    TikTok Organic Series A
-                  </div>
-                </div>
-                <div>
-                  <label className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider">
-                    Avatar
-                  </label>
-                  <div className="mt-1 bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-xs text-zinc-700 flex justify-between items-center">
-                    <span>Maria V. · Casual</span>
-                    <span className="text-zinc-400 text-[10px]">v</span>
-                  </div>
-                </div>
-                <div>
-                  <label className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider">
-                    Script
-                  </label>
-                  <div className="mt-1 bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-xs text-zinc-700 flex justify-between items-center">
-                    <span>Product Introduction</span>
-                    <span className="text-zinc-400 text-[10px]">v</span>
-                  </div>
-                </div>
-                <motion.div
-                  animate={{ scale: [1, 1.02, 1] }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  className="bg-accent-600 text-white text-xs font-semibold text-center py-2.5 rounded-lg cursor-pointer"
-                >
-                  Generate Video
-                </motion.div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Image
+          src="/hero/infinityloop.png"
+          alt="Infinite UGC"
+          width={600}
+          height={600}
+          priority
+          className="w-full h-auto object-contain drop-shadow-[0_20px_60px_rgba(14,165,233,0.25)]"
+        />
       </motion.div>
     </motion.div>
   );
@@ -510,9 +389,9 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* Right — Product Mockup with 3D depth */}
-          <div className="relative lg:pl-4" style={{ transformStyle: "preserve-3d" }}>
-            <DashboardMockup />
+          {/* Right — Infinity Loop Visual */}
+          <div className="relative lg:pl-4">
+            <HeroVisual />
           </div>
         </div>
       </div>
