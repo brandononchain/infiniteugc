@@ -1,102 +1,194 @@
 "use client";
 
-import { motion, useMotionValue, useScroll, useTransform } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import { ArrowRight, Lightning, Play } from "@phosphor-icons/react";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import GradientBackground from "./gradient-background";
 
-/* ─── Floating Video Card ─── */
-interface FloatingCardProps {
-  src: string;
-  type: "video" | "avatar";
-  className?: string;
-  rotateX?: number;
-  rotateY?: number;
-  rotateZ?: number;
-  delay?: number;
-  duration?: number;
-}
+/* ─── Orbit Card Data ─── */
+const ORBIT_CARDS = [
+  "/videos/ugc-1.mp4",
+  "/videos/ugc-2.mp4",
+  "/videos/ugc-3.mp4",
+  "/videos/ugc-4.mp4",
+  "/videos/ugc-5.mp4",
+  "/videos/ugc-6.mp4",
+  "/videos/ugc-7.mp4",
+  "/videos/ugc-8.mp4",
+];
 
-function FloatingVideoCard({
-  src,
-  type,
-  className = "",
-  rotateX = 0,
-  rotateY = 0,
-  rotateZ = 0,
-  delay = 0,
-  duration = 7,
-}: FloatingCardProps) {
+const CARD_COUNT = ORBIT_CARDS.length;
+const ORBIT_SPEED = 0.003; // radians per frame (~10s full orbit)
+
+/* ─── 3D Orbit Carousel ─── */
+function OrbitCarousel() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const angleRef = useRef(0);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const cardEls = useRef<(HTMLDivElement | null)[]>([]);
+  const [visible, setVisible] = useState(false);
+
+  /* Staggered intro fade */
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 300);
+    return () => clearTimeout(t);
+  }, []);
+
+  /* 60 fps orbit loop */
+  useEffect(() => {
+    let raf: number;
+
+    const tick = () => {
+      angleRef.current += ORBIT_SPEED;
+      const box = containerRef.current;
+      if (!box) {
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+
+      const cw = box.offsetWidth;
+      const ch = box.offsetHeight;
+      const rx = cw * 0.48; // horizontal radius
+      const ry = ch * 0.13; // vertical radius (tilt)
+
+      /* Collect positions for z-sorting */
+      const items: { i: number; depth: number; x: number; y: number }[] = [];
+      for (let i = 0; i < CARD_COUNT; i++) {
+        const theta = angleRef.current + (i * 2 * Math.PI) / CARD_COUNT;
+        items.push({
+          i,
+          depth: Math.sin(theta),
+          x: rx * Math.cos(theta),
+          y: ry * Math.sin(theta),
+        });
+      }
+
+      /* Back-to-front depth sort */
+      items.sort((a, b) => a.depth - b.depth);
+
+      for (let zi = 0; zi < items.length; zi++) {
+        const { i, depth, x, y } = items[zi];
+        const el = cardEls.current[i];
+        if (!el) continue;
+
+        const dn = (depth + 1) / 2; // 0 (far) → 1 (near)
+        const scale = 0.55 + dn * 0.45;
+        const opacity = 0.15 + dn * 0.85;
+        const blur = (1 - dn) * 4;
+        /* Front cards above infinity loop (z-30), back cards behind */
+        const zIndex = depth > 0 ? 50 + zi : zi;
+
+        el.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+        el.style.opacity = String(opacity);
+        el.style.filter = blur > 0.2 ? `blur(${blur}px)` : "none";
+        el.style.zIndex = String(zIndex);
+
+        /* Smart play/pause based on depth */
+        const vid = videoRefs.current[i];
+        if (vid) {
+          if (dn > 0.35 && vid.paused) vid.play().catch(() => {});
+          else if (dn <= 0.35 && !vid.paused) vid.pause();
+        }
+      }
+
+      raf = requestAnimationFrame(tick);
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 0.8 + delay, duration: 0.6, ease: "easeOut" }}
-      className={`absolute pointer-events-none z-10 ${className}`}
-      style={{
-        perspective: "800px",
-      }}
+    <div
+      ref={containerRef}
+      className="relative w-full aspect-square flex items-center justify-center"
+      style={{ perspective: "1200px" }}
     >
-      <motion.div
-        animate={{
-          y: [0, -14, 0],
-          rotateZ: [rotateZ, rotateZ + 1, rotateZ],
-        }}
-        transition={{
-          duration,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: delay * 0.5,
-        }}
-        style={{
-          transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`,
-          transformStyle: "preserve-3d",
-        }}
-        className="rounded-2xl overflow-hidden border border-white/30 shadow-[0_8px_40px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.06)] backdrop-blur-sm"
-      >
-        {/* Glass reflection overlay */}
-        <div className="absolute inset-0 z-20 bg-gradient-to-br from-white/20 via-transparent to-transparent pointer-events-none" />
+      {/* Subtle orbit track */}
+      <div
+        className="absolute top-1/2 left-1/2 border border-accent-300/[0.08] rounded-[50%] pointer-events-none"
+        style={{ width: "96%", height: "26%", transform: "translate(-50%, -50%)" }}
+      />
 
-        {type === "video" ? (
-          <div className="relative">
+      {/* Accent glows */}
+      <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] bg-accent-400/15 rounded-full blur-[100px] animate-drift" />
+      <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-accent-300/20 rounded-full blur-[80px] animate-drift-reverse" />
+
+      {/* Infinity Loop center layer (z-30: between back and front orbit cards) */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.85 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ type: "spring", stiffness: 50, damping: 18, delay: 0.3 }}
+        className="relative z-30 pointer-events-none"
+        style={{ width: "65%", maxWidth: "480px" }}
+      >
+        <motion.div
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Image
+            src="/hero/infinityloop.png"
+            alt="Infinite UGC"
+            width={900}
+            height={900}
+            priority
+            className="w-full h-auto object-contain drop-shadow-[0_20px_60px_rgba(14,165,233,0.3)]"
+          />
+        </motion.div>
+      </motion.div>
+
+      {/* Orbiting Cards */}
+      {ORBIT_CARDS.map((src, i) => (
+        <div
+          key={i}
+          ref={(el) => {
+            cardEls.current[i] = el;
+          }}
+          className={`absolute top-1/2 left-1/2 -ml-[60px] -mt-[85px] w-[120px] h-[170px] transition-opacity duration-700 ${
+            visible ? "opacity-100" : "opacity-0"
+          }`}
+          style={{ willChange: "transform, opacity, filter" }}
+        >
+          <div className="relative w-full h-full rounded-2xl overflow-hidden border border-white/25 shadow-[0_8px_32px_rgba(0,0,0,0.15),0_2px_8px_rgba(0,0,0,0.08)] bg-white/5">
+            {/* Glass reflection */}
+            <div className="absolute inset-0 z-20 bg-gradient-to-br from-white/25 via-transparent to-transparent pointer-events-none" />
+
             <video
+              ref={(el) => {
+                videoRefs.current[i] = el;
+              }}
               src={src}
-              autoPlay
               loop
               muted
               playsInline
               className="w-full h-full object-cover"
             />
-            {/* Play icon overlay */}
-            <div className="absolute inset-0 flex items-center justify-center z-10">
-              <div className="w-8 h-8 bg-white/70 rounded-full flex items-center justify-center backdrop-blur-sm shadow-lg">
-                <Play size={12} weight="fill" className="text-zinc-700 ml-0.5" />
+
+            {/* Play icon */}
+            <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+              <div className="w-7 h-7 bg-white/60 rounded-full flex items-center justify-center backdrop-blur-sm shadow-md">
+                <Play size={10} weight="fill" className="text-zinc-700 ml-0.5" />
               </div>
             </div>
+
             {/* Progress bar */}
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/20 z-10">
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black/20 z-10">
               <motion.div
-                className="h-full bg-accent-500/80"
+                className="h-full bg-accent-400/70"
                 animate={{ width: ["0%", "100%"] }}
                 transition={{
                   duration: 8,
                   repeat: Infinity,
                   ease: "linear",
-                  delay: delay,
+                  delay: i,
                 }}
               />
             </div>
           </div>
-        ) : (
-          <img
-            src={src}
-            alt="AI Avatar"
-            className="w-full h-full object-cover"
-          />
-        )}
-      </motion.div>
-    </motion.div>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -175,114 +267,9 @@ function MagneticButton({
   );
 }
 
-/* ─── Hero Visual — Infinity Loop ─── */
-function HeroVisual() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ type: "spring", stiffness: 60, damping: 20, delay: 0.4 }}
-      className="relative w-full flex items-center justify-center"
-    >
-      {/* Accent glow behind the image */}
-      <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] bg-accent-400/15 rounded-full blur-[100px] animate-drift" />
-      <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-accent-300/20 rounded-full blur-[80px] animate-drift-reverse" />
-
-      {/* Floating animation wrapper */}
-      <motion.div
-        animate={{ y: [0, -12, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="relative w-full max-w-3xl"
-      >
-        <Image
-          src="/hero/infinityloop.png"
-          alt="Infinite UGC"
-          width={900}
-          height={900}
-          priority
-          className="w-full h-auto object-contain drop-shadow-[0_20px_60px_rgba(14,165,233,0.25)] scale-125 lg:scale-150"
-        />
-      </motion.div>
-    </motion.div>
-  );
-}
-
-/* ─── Floating card data ─── */
-const floatingCards: FloatingCardProps[] = [
-  // Left side cards
-  {
-    src: "/videos/ugc-1.mp4",
-    type: "video",
-    className: "hidden lg:block -left-8 top-[18%] w-[130px] h-[185px]",
-    rotateX: 5,
-    rotateY: 15,
-    rotateZ: -6,
-    delay: 0,
-    duration: 7,
-  },
-  {
-    src: "/avatars/ai-avatar-3.jpg",
-    type: "avatar",
-    className: "hidden lg:block left-[2%] bottom-[15%] w-[110px] h-[140px]",
-    rotateX: -4,
-    rotateY: 12,
-    rotateZ: 4,
-    delay: 0.3,
-    duration: 8,
-  },
-  {
-    src: "/videos/ugc-3.mp4",
-    type: "video",
-    className: "hidden xl:block left-[8%] top-[55%] w-[105px] h-[150px]",
-    rotateX: 3,
-    rotateY: 8,
-    rotateZ: -3,
-    delay: 0.6,
-    duration: 9,
-  },
-  // Right side cards
-  {
-    src: "/avatars/ai-avatar-5.jpg",
-    type: "avatar",
-    className: "hidden lg:block -right-4 top-[12%] w-[120px] h-[155px]",
-    rotateX: -3,
-    rotateY: -14,
-    rotateZ: 5,
-    delay: 0.15,
-    duration: 7.5,
-  },
-  {
-    src: "/videos/ugc-5.mp4",
-    type: "video",
-    className: "hidden lg:block right-[1%] bottom-[18%] w-[125px] h-[175px]",
-    rotateX: 4,
-    rotateY: -10,
-    rotateZ: -4,
-    delay: 0.45,
-    duration: 8.5,
-  },
-  {
-    src: "/avatars/ai-avatar-7.jpg",
-    type: "avatar",
-    className: "hidden xl:block right-[7%] top-[50%] w-[100px] h-[130px]",
-    rotateX: -5,
-    rotateY: -8,
-    rotateZ: 3,
-    delay: 0.7,
-    duration: 9.5,
-  },
-];
-
 /* ─── Hero Section ─── */
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-
-  // Parallax transform for floating cards
-  const cardsY = useTransform(scrollYProgress, [0, 1], [0, -60]);
 
   return (
     <section
@@ -296,13 +283,6 @@ export default function Hero() {
 
       {/* Bottom fade into page background */}
       <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent -z-10 pointer-events-none" />
-
-      {/* ── Floating Video Cards ── */}
-      <motion.div style={{ y: cardsY }} className="absolute inset-0 z-10 pointer-events-none">
-        {floatingCards.map((card, i) => (
-          <FloatingVideoCard key={i} {...card} />
-        ))}
-      </motion.div>
 
       {/* ── Main Content ── */}
       <div className="relative z-20 max-w-350 mx-auto w-full px-6 lg:px-12 pt-24 pb-16 lg:pb-0">
@@ -389,9 +369,9 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* Right — Infinity Loop Visual */}
+          {/* Right — 3D Orbit Carousel */}
           <div className="relative lg:pl-4">
-            <HeroVisual />
+            <OrbitCarousel />
           </div>
         </div>
       </div>
