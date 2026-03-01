@@ -38,4 +38,8 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# original uncompressed assets
+public/videos/originals/
+public/avatars/originals/
 next-env.d.ts

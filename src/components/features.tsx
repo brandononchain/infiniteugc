@@ -145,7 +145,7 @@ const InfiniteCarousel = memo(function InfiniteCarousel() {
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="none"
               className="w-full h-full object-cover"
             />
 
