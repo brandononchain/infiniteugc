@@ -73,15 +73,15 @@ function OrbitCarousel() {
         if (!el) continue;
 
         const dn = (depth + 1) / 2; // 0 (far) → 1 (near)
-        const scale = 0.65 + dn * 0.35;
-        const opacity = 0.35 + dn * 0.65;
-        const blur = (1 - dn) * 2.5;
+        const scale = 0.7 + dn * 0.3;
+        const opacity = 0.85 + dn * 0.15;
+        const blur = (1 - dn) * 0.5;
         /* Front cards above infinity loop (z-30), back cards behind */
         const zIndex = depth > 0 ? 50 + zi : zi;
 
         el.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
         el.style.opacity = String(opacity);
-        el.style.filter = blur > 0.2 ? `blur(${blur}px)` : "none";
+        el.style.filter = blur > 0.1 ? `blur(${blur}px)` : "none";
         el.style.zIndex = String(zIndex);
 
         /* Smart play/pause based on depth */
@@ -121,7 +121,7 @@ function OrbitCarousel() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ type: "spring", stiffness: 50, damping: 18, delay: 0.3 }}
         className="relative z-30 pointer-events-none"
-        style={{ width: "65%", maxWidth: "480px" }}
+        style={{ width: "85%", maxWidth: "640px" }}
       >
         <motion.div
           animate={{ y: [0, -10, 0] }}
