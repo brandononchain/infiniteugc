@@ -192,15 +192,15 @@ function HeroVisual() {
       <motion.div
         animate={{ y: [0, -12, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="relative w-full max-w-lg"
+        className="relative w-full max-w-3xl"
       >
         <Image
           src="/hero/infinityloop.png"
           alt="Infinite UGC"
-          width={600}
-          height={600}
+          width={900}
+          height={900}
           priority
-          className="w-full h-auto object-contain drop-shadow-[0_20px_60px_rgba(14,165,233,0.25)]"
+          className="w-full h-auto object-contain drop-shadow-[0_20px_60px_rgba(14,165,233,0.25)] scale-125 lg:scale-150"
         />
       </motion.div>
     </motion.div>
